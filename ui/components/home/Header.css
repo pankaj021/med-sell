@@ -1,0 +1,32 @@
+.Header-wrp{
+    background: var(--color-header-bg);
+}
+.Header{
+    width: 100%;
+    margin: .75rem 1rem;
+}
+.Header-wrp, .Header, .Header-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.Header-logo {
+    width: 30px;
+    height: 30px;
+}
+.Header-link{
+    display: flex;
+    align-items: center;
+}
+.Header-logo-txt{
+    margin-left: .5rem;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+}
+.Header-user{
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}

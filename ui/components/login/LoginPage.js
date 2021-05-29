@@ -1,20 +1,74 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import './LoginPage.css'
 import { getUserInfoSuccess, getUserInfoError } from '../../actions/sync-actions';
-import {Error} from '../../pattern-lib';
+import { Button, Input, FormControl, InputLabel } from '@material-ui/core';
+const MR_PAGE = '/mr-page';
 
-function LoginPage({error, getUserInfoSuccess, getUserInfoError}) {
-    if(error.isError) return <Error errorMsg={error.errorMsg}/>
+function LoginPage({error}) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [userErr, setUserErr] = useState(false);
+    const [passwordErr, setPasswordErr] = useState(false);
+    const [redirectTo, setRedirectTo] = useState('');
+    const isValidUserName = (username) => {
+        return !!username;
+    }
+    const isValidPassword = (password) => {
+        return !!password;
+    }
+    const onChangeUsername = (event) => {
+        const value = event.target.value;
+        setUsername(value);
+        if(isValidUserName(value)){
+            setUserErr(false);
+            setRedirectTo(value && password ? MR_PAGE : '');
+        } else {
+            setUserErr(true);
+            setRedirectTo('');
+        }
+        return;
+    }
+    const onChangePassword = (event) => {
+        const value = event.target.value;
+        setPassword(value);
+        if(isValidPassword(value)){
+            setPasswordErr(false);
+            setRedirectTo(value && username ? MR_PAGE : '');
+        } else {
+            setPasswordErr(true);
+            setRedirectTo('');
+        }
+        return;
+    }
+    const onLoginSubmit = () => {
+        !username ? setUserErr(true) : setUserErr(false);
+        !password ? setPasswordErr(true) : setPasswordErr(false);
+        if(username && password) return setRedirectTo(`/mr-page`);
+    }
+
+    if(error.isError) return <div>error .......</div> ;
     return (
-        <div className="login">
-            <div className='login-head'>
-                <img src='/icons/google.svg' alt="Google"/>
-                <h3>Sign in with Google</h3>
-            </div>
-            <div className='login-form'>
-                <input type='text' placeholder='Email' className='u-input'/>
-                <input type='password' placeholder="Password" className='u-input'/>
+        <div className='Login-wrp'>
+            <div className="login">
+                <div className='login-head'>
+                    <img className='login-img' src='/icons/pharmacy.svg' alt="Linest Pharma"/>
+                    <h3>Login with your Official ID</h3>
+                </div>
+                <div className='login-form'>
+                    <FormControl fullWidth={true} required={true} error={userErr} className='Login-input'>
+                        <InputLabel htmlFor="user-input" >Username</InputLabel>
+                        <Input value={username} onChange={onChangeUsername} type='text' id="username" aria-describedby="my-helper-text" fullWidth={true}/>
+                    </FormControl>
+                    <FormControl fullWidth={true} required={true} error={passwordErr} className='Login-input'>
+                        <InputLabel htmlFor="password-input">Password</InputLabel>
+                        <Input value={password} onChange={onChangePassword} type='password' id="password" aria-describedby="my-helper-text" fullWidth={true}/>
+                    </FormControl>
+                    <Link to={`${redirectTo}`} className='Login-link'>
+                        <Button onClick={onLoginSubmit} className='Login-btn' fullWidth={true}>Login</Button>
+                    </Link>
+                </div>
             </div>
         </div>
     )

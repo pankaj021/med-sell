@@ -1,5 +1,5 @@
 body{
-    font: 16px "Gotham Rounded A", "Gotham Rounded B", "Gotham Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font: 0.875rem "Gotham Rounded A", "Gotham Rounded B", "Gotham Rounded", "Helvetica Neue", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     word-wrap: break-word;
     line-height: 1.8;
@@ -31,8 +31,12 @@ img{
     align-items: center;
 }
 :root {
-    --text-color: rgba(0,0,0,.87);
+    --color-text-primary: rgb(36 41 46);
+    --color-text-link: rgb(3 102 214);
+    --color-header-bg: rgb(36 41 46);
+    --color-text-link: rgb(3 102 214);
+    --color-btn-primary-bg: rgb(46 164 79);
     --body-bg: #FFFFFF;
     background-color: var(--body-bg);
-    color: var(--text-color);
+    color: var(--color-text-primary);
 }

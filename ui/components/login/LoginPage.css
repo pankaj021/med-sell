@@ -1,15 +1,25 @@
+.Login-wrp{
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .login {
     display: inline-block;
-    position: absolute;
-    top: 50%;
-    left: 50%;
     background: #FFFFFF;
     box-shadow: 0px 4px 10px rgba(5, 62, 209, 0.19);
     border-radius: 10px;
     padding: 3rem 2rem;
     margin-bottom: 1.5rem;
-    transform: translate(-50%, -50%);
-    min-width: 400px;
+    /* min-width: 400px; */
+    margin: 1rem;
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+}
+.Login-input{
+    margin-bottom: 1.5rem !important;
 }
 .login-head{
     text-align: center;
@@ -21,10 +31,10 @@
     border: 1px solid #888;
     box-sizing: border-box;
     border-radius: 4px;
-    padding: 1rem;
+    padding: .5rem;
     transition: all 0.2s ease-in-out;
     margin-bottom: 1.5rem;
-    font-size: 16px;
+    font-size: 0.875rem;
 }
 .u-input:focus, .sign-btn-in:focus{
     border: 2px solid #0A45C2;
@@ -41,4 +51,21 @@
     width: 100%;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
+}
+.login-img{
+    height: 50px;
+    width: 50px;
+}
+.Login-btn{
+    background-color: var(--color-btn-primary-bg) !important;
+    color: #FFFFFF !important;
+}
+.Login-link{
+    display: block;
+    margin-top: 1rem;
+}
+@media only screen and (max-width: 600px) {
+    .Login-wrp{
+        margin-top: 0rem;
+    }
 }

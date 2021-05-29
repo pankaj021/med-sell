@@ -1,17 +1,20 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import LocalPharmacyOutlinedIcon from '@material-ui/icons/LocalPharmacyOutlined';
-import './HomePage.css'
+import './Header.css'
 
 function Header() {
     return (
-        <header>
-            <div className="logo-section d-flex align-ct">
-                <img src='/icons/mr2.jpeg' className='header-icon'/>
-                {/* <LocalPharmacyOutlinedIcon className='header-icon' style={{ color: 'red'}} fontSize="small"/> */}
-                <div className='h-other'>
-                    <h3>Med Sell</h3>
-                    <h4>Pankaj Maurya</h4>
+        <header className='Header-wrp'>
+            <div className='Header'>
+                <div className="Header-item">
+                    <a className='Header-link' href='/'>
+                        <img className='Header-logo' src='/icons/pharmacy.svg' alt='Linest Pharma'/>
+                        <div className='Header-logo-txt'>Linest Pharma</div>
+                    </a>
+                </div>
+                <div className="Header-user">
+                    Pan M
                 </div>
             </div>
         </header>

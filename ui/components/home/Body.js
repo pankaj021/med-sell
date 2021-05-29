@@ -1,10 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import LoginPage from '../login/LoginPage';
 
-function Body() {
+function Body({children}) {
     return (
         <div className="body-page">
-           Body
+           {children}
         </div>
     )
 }
