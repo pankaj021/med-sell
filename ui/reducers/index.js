@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import userReducer from './ignore/userReducer';
+import loginReducer from './loginReducer';
 import loaderReducer from './loaderReducer';
 import errorReducer from './errorReducer';
+import navReducer from './navReducer';
 
 export default combineReducers({
-    user: userReducer,
     loader: loaderReducer,
-    error: errorReducer
+    error: errorReducer,
+    login: loginReducer,
+    navView: navReducer,
 })

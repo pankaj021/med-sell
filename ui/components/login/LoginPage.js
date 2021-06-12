@@ -2,16 +2,21 @@ import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import './LoginPage.css'
-import { getUserInfoSuccess, getUserInfoError } from '../../actions/sync-actions';
-import { Button, Input, FormControl, InputLabel } from '@material-ui/core';
-const MR_PAGE = '/mr-page';
+import { loginConfig } from '../../actions/thunk/httpThunkConfig';
+import {httpThunk} from '../../actions/thunk/httpThunk';
+import { Button, Input, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
+import Loader from './Loader';
+const MR_PAGE = '/home';
 
-function LoginPage({error}) {
+function LoginPage({error, loader, loginInfo, loginUser}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [userErr, setUserErr] = useState(false);
     const [passwordErr, setPasswordErr] = useState(false);
     const [redirectTo, setRedirectTo] = useState('');
+    if(loginInfo.username){
+        return setRedirectTo(`/home`);
+    }
     const isValidUserName = (username) => {
         return !!username;
     }
@@ -45,10 +50,13 @@ function LoginPage({error}) {
     const onLoginSubmit = () => {
         !username ? setUserErr(true) : setUserErr(false);
         !password ? setPasswordErr(true) : setPasswordErr(false);
-        if(username && password) return setRedirectTo(`/mr-page`);
+        if(username && password) {
+            loginUser({username, password});
+        }
     }
+    if(error.isError) return <div>{error.errorMsg}</div>
+    if(loader.isLoading) return <Loader loadingMsg={loader.loadingMsg} />
 
-    if(error.isError) return <div>error .......</div> ;
     return (
         <div className='Login-wrp'>
             <div className="login">
@@ -75,12 +83,13 @@ function LoginPage({error}) {
 }
 
 const mapStateToProps = (state) => ({
-    error: state.error
+    loginInfo: state.login,
+    error: state.error,
+    loader: state.loader,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getUserInfoSuccess: (userInfo) => dispatch(getUserInfoSuccess(userInfo)),
-    getUserInfoError: (userInfo) => dispatch(getUserInfoError(userInfo))
+    loginUser: (loginReq) => dispatch(httpThunk(loginConfig(loginReq))),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

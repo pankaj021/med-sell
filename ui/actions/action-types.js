@@ -1,10 +1,7 @@
 export const IS_LOADING = "IS_LOADING";
 export const IS_ERROR = "IS_ERROR";
-export const GET_CONTACT_SUCCESS = "GET_CONTACT_SUCCESS";
-export const GET_USER_INFO_SUCCESS = "GET_USER_INFO_SUCCESS";
-export const GET_USER_INFO_ERROR = "GET_USER_INFO_ERROR";
-export const GET_TEACHERS = "GET_TEACHERS";
-export const GET_TARGETS = "GET_TARGETS";
-export const GET_DONATIONS = "GET_DONATIONS";
-export const GET_CONTRIBUTORS = "GET_CONTRIBUTORS";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const ADD_DETAIL = "ADD_DETAIL";
+export const VIEW_DETAIL = "VIEW_DETAIL";
+
 

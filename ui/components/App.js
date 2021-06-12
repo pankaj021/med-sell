@@ -5,31 +5,24 @@ import './App.css';
 import LoginPage from './login/LoginPage';
 import Header from './home/Header';
 import Body from './home/Body';
-import MRDashboard from './mr-page/MRDashboard';
+import HomePage from './home/HomePage';
 
-function App ({isLoading, isError, loadMsg, errorMsg}){
-    if (isError) 
-        return <div>error .......</div> ;
-    if (isLoading) 
-        return <div>'loading .......'</div>;
+function App (){
     return (
-        <BrowserRouter>
-            <div className='max-ht'>
-                <Header/>
+        <div className='max-ht'>
+            <Header/>
+            <BrowserRouter>
                 <Switch>
                     <Body>
                         <Route exact path='/' component={LoginPage}/>
-                        <Route path='/mr-page' component={MRDashboard}/>
+                        <Route path='/home' component={HomePage}/>
                     </Body>
                 </Switch>
-            </div>
-        </BrowserRouter>
+            </BrowserRouter>
+        </div>
     )
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user,
-    error: state.error
-})
+const mapStateToProps = null;
 
 export default connect(mapStateToProps, null)(App);

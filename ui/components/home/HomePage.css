@@ -1,0 +1,16 @@
+.AddCard{
+    margin: 1rem 0;
+}
+.addcard-paper {
+    padding: 1rem;
+}
+.save-detail-wrp{
+    display: flex;
+    align-items: flex-end;
+}
+.save-detail{
+    min-width: 100px;
+}
+.addcard-paper h4 {
+    margin-top: 0 !important;
+}

@@ -5,8 +5,14 @@ router.get('/', (req, res, next) => {
     res.render('index');
 });
 
-router.get('/mr-page', (req, res, next) => {
+router.get('/home', (req, res, next) => {
     res.render('index');
+});
+
+router.post('/login', (req, res, next) => {
+    res.json({
+        username: req.body.username
+    })
 });
 
 module.exports = router;
