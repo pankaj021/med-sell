@@ -7,10 +7,16 @@
 .save-detail-wrp{
     display: flex;
     align-items: flex-end;
+    justify-content: flex-end;
 }
 .save-detail{
-    min-width: 100px;
+    display: inline-block;
+    max-width: 100%;
+    min-width: 100px !important;
 }
 .addcard-paper h4 {
     margin-top: 0 !important;
+}
+.view-filter{
+    margin: 2rem 0 !important;
 }

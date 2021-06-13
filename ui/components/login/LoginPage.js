@@ -4,8 +4,8 @@ import {Link} from 'react-router-dom';
 import './LoginPage.css'
 import { loginConfig } from '../../actions/thunk/httpThunkConfig';
 import {httpThunk} from '../../actions/thunk/httpThunk';
-import { Button, Input, FormControl, InputLabel, CircularProgress } from '@material-ui/core';
-import Loader from './Loader';
+import { Button, Input, FormControl, InputLabel } from '@material-ui/core';
+import Loader from '../common/Loader';
 const MR_PAGE = '/home';
 
 function LoginPage({error, loader, loginInfo, loginUser}) {

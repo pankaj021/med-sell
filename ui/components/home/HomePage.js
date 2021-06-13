@@ -4,14 +4,14 @@ import {connect} from 'react-redux';
 import './HomePage.css';
 import AddDetail from './AddDetail';
 import ViewDetail from './ViewDetail';
-import Loader from '../login/Loader';
+import Loader from '../common/Loader';
 
 function HomePage({loader, error, loginInfo, navView,}) {
     if(error.isError) return <div>{error.errorMsg}</div>
     if(loader.isLoading) return <Loader loadingMsg={loader.loadingMsg} />
-    if(!loginInfo.username) {
-        return <Redirect to='/'/>
-    }
+    // if(!loginInfo.username) {
+    //     return <Redirect to='/'/>
+    // }
     if(navView.view === 1){
         return <AddDetail/>
     }

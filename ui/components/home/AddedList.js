@@ -57,7 +57,7 @@ export default function AddedList() {
 
     return (
         <div className='AddedList'>
-            <h3>View Added items</h3>
+            <h3>Added items</h3>
             <Paper className='paper'>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">
@@ -109,7 +109,7 @@ export default function AddedList() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
+                    rowsPerPageOptions={[5, 10, 25, 100]}
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
