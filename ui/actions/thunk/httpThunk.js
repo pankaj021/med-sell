@@ -2,7 +2,9 @@ import axios from 'axios';
 import * as actions from '../action-types';
 
 export const httpThunk = (config) => {
+    console.log('config>>>>>>>>>>>>>>>>>>>',config.data) 
     return async(dispatch) => {
+        
         try {
             if(!config.successAction) throw new Error('No action found...');
             dispatch({
@@ -10,6 +12,8 @@ export const httpThunk = (config) => {
                 payload: 'Please wait, loading data for you...'
             })
             const response = await axios(config);
+            console.log('action>>>>>>>>>>>>>>>>>>>',response.data)
+            
             dispatch({
                 type: config.successAction,
                 payload: response.data || null

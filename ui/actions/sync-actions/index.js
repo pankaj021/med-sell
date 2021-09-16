@@ -9,3 +9,9 @@ export const selectNavView = (navView) => {
         type: navMap[navView]
     }
 }
+export const getVisitAction = (payload) => {
+    return {
+        "type": actions.SAVE_VISIT,
+        "payload": payload
+    }
+}

@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
+import {httpThunk} from '../../actions/thunk/httpThunk';
+import { saveVisitConfig, loadDdConfig } from '../../actions/thunk/httpThunkConfig';
 import {TextField, Grid, Paper, Input, Select, Button, MenuItem, FormControl, InputLabel} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CheckboxesTags from '../common/AutoCompleteChip';
+import { getVisitAction } from '../../actions/sync-actions';
+import axios from 'axios';
 
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
 const top100Films = [
     { title: 'The Shawshank Redemption', year: 1994 },
     { title: 'The Godfather', year: 1972 },
@@ -37,91 +42,85 @@ const top100Films = [
     { title: 'Once Upon a Time in the West', year: 1968 },
     { title: 'American History X', year: 1998 },
     { title: 'Interstellar', year: 2014 },
-    { title: 'Casablanca', year: 1942 },
-    { title: 'City Lights', year: 1931 },
-    { title: 'Psycho', year: 1960 },
-    { title: 'The Green Mile', year: 1999 },
-    { title: 'The Intouchables', year: 2011 },
-    { title: 'Modern Times', year: 1936 },
-    { title: 'Raiders of the Lost Ark', year: 1981 },
-    { title: 'Rear Window', year: 1954 },
-    { title: 'The Pianist', year: 2002 },
-    { title: 'The Departed', year: 2006 },
-    { title: 'Terminator 2: Judgment Day', year: 1991 },
-    { title: 'Back to the Future', year: 1985 },
-    { title: 'Whiplash', year: 2014 },
-    { title: 'Gladiator', year: 2000 },
-    { title: 'Memento', year: 2000 },
-    { title: 'The Prestige', year: 2006 },
-    { title: 'The Lion King', year: 1994 },
-    { title: 'Apocalypse Now', year: 1979 },
-    { title: 'Alien', year: 1979 },
-    { title: 'Sunset Boulevard', year: 1950 },
-    { title: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb', year: 1964 },
-    { title: 'The Great Dictator', year: 1940 },
-    { title: 'Cinema Paradiso', year: 1988 },
-    { title: 'The Lives of Others', year: 2006 },
-    { title: 'Grave of the Fireflies', year: 1988 },
-    { title: 'Paths of Glory', year: 1957 },
-    { title: 'Django Unchained', year: 2012 },
-    { title: 'The Shining', year: 1980 },
-    { title: 'WALL·E', year: 2008 },
-    { title: 'American Beauty', year: 1999 },
-    { title: 'The Dark Knight Rises', year: 2012 },
-    { title: 'Princess Mononoke', year: 1997 },
-    { title: 'Aliens', year: 1986 },
-    { title: 'Oldboy', year: 2003 },
-    { title: 'Once Upon a Time in America', year: 1984 },
-    { title: 'Witness for the Prosecution', year: 1957 },
-    { title: 'Das Boot', year: 1981 },
-    { title: 'Citizen Kane', year: 1941 },
-    { title: 'North by Northwest', year: 1959 },
-    { title: 'Vertigo', year: 1958 },
-    { title: 'Star Wars: Episode VI - Return of the Jedi', year: 1983 },
-    { title: 'Reservoir Dogs', year: 1992 },
-    { title: 'Braveheart', year: 1995 },
-    { title: 'M', year: 1931 },
-    { title: 'Requiem for a Dream', year: 2000 },
-    { title: 'Amélie', year: 2001 },
-    { title: 'A Clockwork Orange', year: 1971 },
-    { title: 'Like Stars on Earth', year: 2007 },
-    { title: 'Taxi Driver', year: 1976 },
-    { title: 'Lawrence of Arabia', year: 1962 },
-    { title: 'Double Indemnity', year: 1944 },
-    { title: 'Eternal Sunshine of the Spotless Mind', year: 2004 },
-    { title: 'Amadeus', year: 1984 },
-    { title: 'To Kill a Mockingbird', year: 1962 },
-    { title: 'Toy Story 3', year: 2010 },
-    { title: 'Logan', year: 2017 },
-    { title: 'Full Metal Jacket', year: 1987 },
-    { title: 'Dangal', year: 2016 },
-    { title: 'The Sting', year: 1973 },
-    { title: '2001: A Space Odyssey', year: 1968 },
-    { title: "Singin' in the Rain", year: 1952 },
-    { title: 'Toy Story', year: 1995 },
-    { title: 'Bicycle Thieves', year: 1948 },
-    { title: 'The Kid', year: 1921 },
-    { title: 'Inglourious Basterds', year: 2009 },
-    { title: 'Snatch', year: 2000 },
-    { title: '3 Idiots', year: 2009 },
-    { title: 'Monty Python and the Holy Grail', year: 1975 },
-];
+  ];
+  
 
 const append0 = (num) => `${num}`.length === 1 ? `0${num}` : num;
 
-function AddCard() {
+function AddCard({ onSaveVisitAction,edit}) {
     const today = new Date();
     const year = today.getFullYear();
     const month = append0(today.getMonth() + 1);
     const date = append0(today.getDate());
     const dateStr = `${year}-${month}-${date}`;
+    const [otherComment, setOtherComment] = useState('');
+    const [town, setTown] = useState('');
+    const [chemist, setChemist] = useState('');
+    const [doctor, setDoctor] = useState('');
+    const [product, setProduct] = useState('');
+    const [townOptions, setTownOptions] = useState([{"title": "Edit value", "value": "Edit value"}]);
+    const [townIndex, setTownIndex] = useState(0);
+
     console.log(dateStr);
+    
+    
     
     const [selectedDate, setSelectedDate] = useState(dateStr);
     const handleDateChange = (event) => {
         console.log("event.target.value", event.target.value);
         setSelectedDate(date);
     }
+    const onChangeOtherComment = event => {
+        setOtherComment(event.target.value)
+    }
+    const onChangeTown = (event, v) => {
+        if(!v || !v.value) return;
+        for(let i=0; i<townOptions.length; i++){
+            if(v.value ===  townOptions[i].value){
+                setTownIndex(i);
+                return;
+            }
+        }
+    }
+    const onTownBlur = (e, v) => {
+        setTownOptions([
+            {"title":  e.target.value, "value":  e.target.value},
+            ...townOptions
+        ])
+        setTownIndex(0)
+    }
+    const onChangeChemist = event => {
+        setChemist(event.target.value)
+    }
+    const onChangeDoctor = event => {
+        setDoctor(event.target.value)
+    }
+    const onChangeProduct = (event, value)=> {
+        const productStr = value.map(product => product.title).join(',')
+        setProduct(productStr)
+    }
+
+    const saveVisit = () => {
+      
+        onSaveVisitAction({
+            "otherComment": otherComment,
+            "town"        : town,
+            "chemist"     : chemist,
+            "doctor"      : doctor,
+            "product"     : product,
+        })
+    }
+    useEffect(() => {
+        const fetch = async () => {
+            const res = await axios.get('http://localhost:3000/ddData')
+            setTownOptions(res.data.townOptions)
+
+        }
+        fetch()
+    }, [])
+    console.log('townOptions >>>>>>>>>>>>>>>>>>>>>>>>>>>>>',townOptions)
+    console.log('townIndex >>>>>>>>>>>>>>>>>>>>>>>>>>>>>',townIndex)
+    
     return (
         <div className="AddCard">
             {/* <div className='static-paper'>
@@ -167,7 +166,10 @@ function AddCard() {
                             <Grid item xs={4}>
                                 <Autocomplete
                                     id="combo-box-demo"
-                                    options={top100Films}
+                                    onChange = {onChangeTown}
+                                    onBlur = {onTownBlur}
+                                    value={townOptions[townIndex]}
+                                    options={townOptions}
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => <TextField {...params} label="Town" variant="outlined" />}
                                 />
@@ -175,6 +177,7 @@ function AddCard() {
                             <Grid item xs={4}>
                                 <Autocomplete
                                     id="combo-box-demo"
+                                    onSelect = {onChangeDoctor}
                                     options={top100Films}
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => <TextField {...params} label="Doctor" variant="outlined" />}
@@ -183,6 +186,7 @@ function AddCard() {
                             <Grid item xs={4}>
                                 <Autocomplete
                                     id="combo-box-demo"
+                                    onSelect = {onChangeChemist}
                                     options={top100Films}
                                     getOptionLabel={(option) => option.title}
                                     renderInput={(params) => <TextField {...params} label="Chemist" variant="outlined" />}
@@ -191,29 +195,36 @@ function AddCard() {
                         </Grid>
                         <Grid container spacing={3}>
                             <Grid item xs={8}>
-                                <CheckboxesTags 
-                                    label="Products"
-                                    required={true}
-                                />
+                            <Autocomplete
+                                multiple
+                                options={top100Films}
+                                getOptionLabel={(option) => option.title}
+                                // defaultValue={[top100Films[13]]}
+                                onChange = {onChangeProduct}
+                                renderInput={(params) => (
+                                    <TextField {...params} variant="outlined" label="Size small" placeholder="Favorites" />
+                                )}
+                            />
                             </Grid>
                             <Grid item xs={4}>
                                 <TextField
                                     error={false}
                                     id="outlined-error-helper-text"
                                     label="Other Comment"
-                                    defaultValue=""
+                                    defaultValue={otherComment}
                                     // helperText="Incorrect entry."
                                     variant="outlined"
                                     multiline
                                     // rows={1}
                                     fullWidth
+                                    onChange = {onChangeOtherComment}
                                     // InputLabelProps={{shrink: true,}}
                                 />
                             </Grid>
                         </Grid>
                         <Grid container spacing={3}>
                             <Grid item xs={12} className='save-detail-wrp'>
-                                <Button className='save-detail'>Save</Button>
+                                <Button onClick = {saveVisit} className='save-detail'>Save</Button>
                             </Grid>
                         </Grid>
                     </Paper>
@@ -223,7 +234,21 @@ function AddCard() {
     )
 }
 
-const mapStateToProps = null;
-const mapDispatchToProps = null
+const mapStateToProps = (state) => ({
+    
+    error: state.error,
+    loader: state.loader, 
+
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        
+        onSaveVisitAction: (payload) => dispatch(httpThunk(saveVisitConfig(payload))),
+        loadDdData: () => dispatch(httpThunk(loadDdConfig())),
+
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddCard);
+

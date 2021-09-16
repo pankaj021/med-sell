@@ -16,7 +16,7 @@ const {NoRouteFound} = require('./middlewares/errors');
 const errorHandler = require('./middlewares/errors/errorHandler');
 
 const NODE_PATH = process.cwd();
-db.init();
+// db.init();
 const app = express();
 
 app.set('views', path.join(NODE_PATH, '/ui/templates'));

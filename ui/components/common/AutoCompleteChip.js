@@ -10,12 +10,14 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-export default function AutoCompleteChip({label, required}) {
+export default function AutoCompleteChip({label, required, onChangeHandler}) {
   return (
     <Autocomplete
       multiple
       id="checkboxes-tags-demo"
       options={top100Films}
+      onSelect={onChangeHandler}
+      
       disableCloseOnSelect
       getOptionLabel={(option) => option.title}
       renderOption={(option, { selected }) => (

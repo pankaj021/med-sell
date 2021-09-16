@@ -1,5 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {httpThunk} from '../../actions/thunk/httpThunk';
+import { deleteVisitConfig } from '../../actions/thunk/httpThunkConfig';
+import { editVisitConfig } from '../../actions/thunk/httpThunkConfig';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -11,7 +14,7 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-
+//const [ID, setID] = useState('');
 const useStyles = makeStyles({
     root: {
         width: '100%',
@@ -21,7 +24,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function AddedList() {
+ function AddedList({visitInfo,onDeleteVisitAction,onEditVisitAction}) {
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -38,22 +41,27 @@ export default function AddedList() {
         { id: 'id', label: 'ID', width: 90 },
         { id: 'chemist', label: 'Chemist', width: 200 },
         { id: 'town', label: 'Town', width: 200 },
-        { id: 'product', label: 'product', width: 200 },
+        { id: 'product', label: 'Product', width: 200 },
+        { id: 'doctor', label: 'Doctor', width: 200 },
         { id: 'edit', label: 'Edit', width: 150 },
         { id: 'delete', label: 'Delete', width: 150 },
     ];
 
-    const rows = [
-        { id: 1, chemist: 'Snow', town: 'North King', product: 'CobidSheild'},
-        { id: 2, chemist: 'Lannister', town: 'Mumbai Andheri', product: 'CoBaxin'},
-        { id: 3, chemist: 'Lannister', town: 'Ocean city', product: 'ZenPac'},
-        { id: 4, chemist: 'Stark', town: 'Bekpur teku', product: 'TicTacMed'},
-        { id: 5, chemist: 'Targaryen', town: 'Austra Nagar', product: 'Riztix Oil'},
-        { id: 6, chemist: 'Melisandre', town: null, product: 'Revant Powder'},
-        { id: 7, chemist: 'Clifford', town: 'Ferrara', product: 'Baki Tek Fex'},
-        { id: 8, chemist: 'Frances', town: 'Rossini', product: 'Letpot G 500'},
-        { id: 9, chemist: 'Roxie', town: 'Harvey', product: 'Pizz Lat'},
-    ];
+    const rows = visitInfo;
+
+    const onClickDelete = (rowId) => {
+        const ID = rowId
+       onDeleteVisitAction({
+            'id' : ID,
+        })
+    }
+    const onClickEdit = (rowId) => {
+        const ID = rowId;
+        
+       onEditVisitAction({
+            'id' : ID,
+        })
+    }
 
     return (
         <div className='AddedList'>
@@ -76,6 +84,7 @@ export default function AddedList() {
                     </TableHead>
                     <TableBody>
                         {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                            
                         return (
                             <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                             {
@@ -84,14 +93,14 @@ export default function AddedList() {
                                     if(column.id === 'edit') {
                                         return (
                                             <TableCell key={column.id} align={column.align}>
-                                                <EditIcon color="primary"/>
+                                                <EditIcon color="primary" onClick = {() => onClickEdit(row.id)}/>
                                             </TableCell>
                                         );
                                     }
                                     if(column.id === 'delete') {
                                         return (
                                             <TableCell key={column.id} align={column.align}>
-                                                <DeleteIcon color="secondary"/>
+                                                <DeleteIcon color="secondary" onClick={() => onClickDelete(row.id)}/>
                                             </TableCell>
                                         );
                                     }
@@ -121,3 +130,24 @@ export default function AddedList() {
         </div>
     )
 }
+
+
+const mapStateToProps = (state) => ({
+    
+    error: state.error, 
+    visitInfo: state.visit,
+    delete : state.delete,
+    edit : state.edit,
+
+})
+
+const mapDispatchToProps = (dispatch) => {
+    
+    return {
+        
+            onDeleteVisitAction: (payload) => dispatch(httpThunk(deleteVisitConfig(payload))),
+            onEditVisitAction: (payload) => dispatch(httpThunk(editVisitConfig(payload)))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddedList);

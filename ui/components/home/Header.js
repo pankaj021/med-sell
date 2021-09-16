@@ -4,7 +4,7 @@ import {selectNavView} from '../../actions/sync-actions';
 import LocalPharmacyOutlinedIcon from '@material-ui/icons/LocalPharmacyOutlined';
 import './Header.css'
 
-function Header({loginInfo, navView, selectNavView}) {
+function Header({loginInfo, navView, selectNavView,visitInfo}) {
     const isLoginPage = window.location.pathname === "/";
     const onClickNav1 = () => selectNavView(1);
     const onClickNav2 = () => selectNavView(2);
@@ -22,7 +22,7 @@ function Header({loginInfo, navView, selectNavView}) {
                     </div>}
                 </div>
                 {!isLoginPage && loginInfo.username && <div className="Header-item Header-user">
-                    {`Hi ${loginInfo.username}`}
+                    {`Hi ${loginInfo.username} `}
                 </div>}
             </div>
         </header>
@@ -31,7 +31,8 @@ function Header({loginInfo, navView, selectNavView}) {
 
 const mapStateToProps = (state) => ({
     loginInfo: state.login,
-    navView: state.navView
+    navView: state.navView,
+    visitInfo: state.visit,
 
 })
 const mapDispatchToProps = (dispatch) => ({
